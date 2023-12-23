@@ -118,5 +118,4 @@ public interface ExtendedListIterator<E> extends ListIterator<E> {
 	 */
 	@Override
 	E previous();
-
 }

@@ -62,7 +62,8 @@ import java.util.Set;
  * @invariant nextIndex() == previousIndex() + 1;
  * @invariant lastIndex() == nextIndex() || lastIndex() == previousIndex();
  * 
- * @invariant ListIterObserver<Post> \model = new ListIterObserverAdapter<Post>(this);
+ * @invariant ListIterObserver<Post> \model = new
+ *            ListIterObserverAdapter<Post>(this);
  * @invariant \model.toList().equals(getPosts());
  * @invariant \model.isSorted(Comparator.reverseOrder());
  * 
@@ -114,11 +115,11 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 */
 	public static User getUser(String userName) {
 		for (User u : allUsers) {
-        	if (u.getName().equals(userName)) {
-            	return u;
-        	}
-    	}
-    	return null;
+			if (u.getName().equals(userName)) {
+				return u;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -137,11 +138,11 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 */
 	public static boolean hasUser(String userName) {
 		for (User u : allUsers) {
-        if (u.getName().equals(userName)) {
-            return true;
-        }
-    }
-    return false;
+			if (u.getName().equals(userName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -539,7 +540,9 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 * 
 	 */
 	public FusionSortedIterator<Post, User> newsFeed() {
-		return null;
+		Set<User> users = new HashSet<User>(subs);
+		users.add(this);
+		return new FusionSortedIterator<Post, User>(users);
 	}
 
 	/**
@@ -642,7 +645,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 */
 	@Override
 	public Post getNext() {
-		if(!hasNext()){
+		if (!hasNext()) {
 			throw new NoSuchElementException();
 		}
 		return getPost(nextIndex);
@@ -789,7 +792,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 */
 	@Override
 	public void set(Post e) {
-				throw new UnsupportedOperationException("Opération non supportée");
+		throw new UnsupportedOperationException("Opération non supportée");
 	}
 
 	/**
@@ -799,7 +802,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 */
 	@Override
 	public void add(Post e) {
-				throw new UnsupportedOperationException("Opération non supportée");
+		throw new UnsupportedOperationException("Opération non supportée");
 	}
 
 }

@@ -174,5 +174,4 @@ public interface Post extends Comparable<Post>, Iterable<User> {
 	 * @pure
 	 */
 	boolean isAfter(Post p);
-
 }

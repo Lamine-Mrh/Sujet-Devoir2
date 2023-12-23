@@ -3,12 +3,12 @@
 */
 package social.model;
 
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
-
-
 
 /**
  * Un ListIterator fusionnant plusieurs ExtendedListIterator en interdisant
@@ -47,6 +47,8 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	private Set<? extends I> iterSet;
 	private Comparator<? super E> comparator;
 	private int previousIndex, nextIndex, lastIndex;
+	private ListIterator<? extends I> iterator;
+	private I currentIterator;
 
 	/**
 	 * Initialise une instance permettant d'itérer selon l'ordre "naturel" sur tous
@@ -77,8 +79,12 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 		if (iters == null) {
 			throw new NullPointerException();
 		}
-		this.iterSet = new HashSet<>(iters);
-		startIteration();
+		if (iters.contains(null)) {
+			throw new NullPointerException();
+		}
+		this.iterSet = iters;
+		this.comparator = Comparator.naturalOrder();
+		this.startIteration();
 	}
 
 	/**
@@ -105,6 +111,18 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 *                              null, ou si le Comparator spécifié est null
 	 */
 	public FusionSortedIterator(Set<? extends I> iters, Comparator<? super E> comparator) {
+		if (iters == null) {
+			throw new NullPointerException();
+		}
+		if (iters.contains(null)) {
+			throw new NullPointerException();
+		}
+		if (comparator == null) {
+			throw new NullPointerException();
+		}
+		this.iterSet = iters;
+		this.comparator = comparator;
+		this.startIteration();
 	}
 
 	/**
@@ -118,9 +136,12 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 * @ensures lastIterator() == null;
 	 */
 	public void startIteration() {
-		previousIndex = -1;
-		nextIndex = 0;
-		lastIndex = -1;
+		this.previousIndex = -1;
+		this.nextIndex = 0;
+		this.lastIndex = -1;
+		List<? extends I> list = new ArrayList<>(iterSet);
+		this.iterator = list.listIterator();
+		this.currentIterator = null;
 	}
 
 	/**
@@ -135,7 +156,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 * @pure
 	 */
 	public Comparator<? super E> comparator() {
-		return null;
+		return this.comparator;
 	}
 
 	/**
@@ -148,7 +169,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 * @pure
 	 */
 	public I lastIterator() {
-		return null;
+		return this.currentIterator;
 	}
 
 	/**
@@ -160,7 +181,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 * @pure
 	 */
 	public int lastIndex() {
-		return -1;
+		return this.lastIndex;
 	}
 
 	/**
@@ -174,7 +195,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 */
 	@Override
 	public boolean hasNext() {
-		return false;
+		return currentIterator.hasNext() || iterator.hasNext();
 	}
 
 	/**
@@ -190,7 +211,9 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 * @ensures \result.equals(lastIterator().getPrevious());
 	 * @ensures \result.equals(iterModel.get(previousIndex()))
 	 * @ensures \result.equals(\old(iterModel.get(nextIndex())));
-	 * @ensures \old(hasPrevious()) ==> comparator().compare(iterModel.get(\old(previousIndex())), \result) <= 0;
+	 * @ensures \old(hasPrevious()) ==>
+	 *          comparator().compare(iterModel.get(\old(previousIndex())), \result)
+	 *          <= 0;
 	 * @ensures hasPrevious();
 	 * @ensures previousIndex() == \old(nextIndex());
 	 * @ensures nextIndex() == \old(nextIndex() + 1);
@@ -198,7 +221,18 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 */
 	@Override
 	public E next() {
-		return null;
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
+		if (currentIterator.hasNext()) {
+			E next = currentIterator.next();
+			lastIndex = nextIndex;
+			nextIndex++;
+			return next;
+		} else {
+			currentIterator = iterator.next();
+			return next();
+		}
 	}
 
 	/**
@@ -212,7 +246,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 */
 	@Override
 	public boolean hasPrevious() {
-		return false;
+		return currentIterator.hasPrevious() || iterator.hasPrevious();
 	}
 
 	/**
@@ -229,14 +263,26 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 * @ensures \result.equals(lastIterator().getNext());
 	 * @ensures \result.equals(\old(iterModel.get(previousIndex())));
 	 * @ensures \result.equals(iterModel.get(nextIndex()));
-	 * @ensures \old(hasNext()) ==> comparator().compare(\result, iterModel.get(\old(nextIndex())) <= 0;
+	 * @ensures \old(hasNext()) ==> comparator().compare(\result,
+	 *          iterModel.get(\old(nextIndex())) <= 0;
 	 * @ensures previousIndex() == \old(previousIndex()) - 1;
 	 * @ensures nextIndex() == \old(nextIndex()) - 1;
 	 * @ensures lastIndex() == \old(previousIndex());
 	 */
 	@Override
 	public E previous() {
-		return null;
+		if (!hasPrevious()) {
+			throw new NoSuchElementException();
+		}
+		if (currentIterator.hasPrevious()) {
+			E previous = currentIterator.previous();
+			lastIndex = previousIndex;
+			previousIndex--;
+			return previous;
+		} else {
+			currentIterator = iterator.previous();
+			return previous();
+		}
 	}
 
 	/**
@@ -252,7 +298,12 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 */
 	@Override
 	public int nextIndex() {
-		return -1;
+		if (hasNext()) {
+			return nextIndex;
+		} else {
+			return iterSet.size();
+
+		}
 	}
 
 	/**
@@ -268,7 +319,11 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 */
 	@Override
 	public int previousIndex() {
-		return -1;
+		if (hasPrevious()) {
+			return previousIndex;
+		} else {
+			return -1;
+		}
 	}
 
 	/**
@@ -288,7 +343,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 */
 	@Override
 	public void set(E e) {
-				throw new UnsupportedOperationException("Opération non supportée");
+		throw new UnsupportedOperationException("Opération non supportée");
 	}
 
 	/**
@@ -298,7 +353,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>, I extends Ext
 	 */
 	@Override
 	public void add(E e) {
-				throw new UnsupportedOperationException("Opération non supportée");
+		throw new UnsupportedOperationException("Opération non supportée");
 	}
 
 }
