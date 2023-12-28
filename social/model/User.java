@@ -5,6 +5,7 @@ package social.model;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,7 +94,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 * @pure
 	 */
 	public static Collection<User> getAllUser() {
-		return new HashSet<User>(allUsers);
+		return Collections.unmodifiableCollection(allUsers);
 	}
 
 	/**
@@ -278,7 +279,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 * @pure
 	 */
 	public Set<User> getSubscriptions() {
-		return Set.copyOf(this.subs);
+		return Collections.unmodifiableSet(this.subs);
 	}
 
 	/**
@@ -295,7 +296,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 * @pure
 	 */
 	public Set<User> getFollowers() {
-		return Set.copyOf(this.followers);
+		return Collections.unmodifiableSet(this.followers);
 	}
 
 	/**
@@ -444,11 +445,11 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 * @pure
 	 */
 	public Post getPost(int i) {
-		try {
-			return posts.get(i);
-		} catch (IndexOutOfBoundsException e) {
-			throw new InternalError();
+		if (i < 0 || i >= getPostNb()) {
+			throw new IndexOutOfBoundsException();
 		}
+		return posts.get(i);
+
 	}
 
 	/**
@@ -465,7 +466,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 * @pure
 	 */
 	public List<Post> getPosts() {
-		return List.copyOf(posts);
+		return Collections.unmodifiableList(posts);
 	}
 
 	/**
@@ -565,7 +566,7 @@ public class User implements Iterable<Post>, ExtendedListIterator<Post> {
 	 */
 	@Override
 	public ListIterator<Post> iterator() {
-		return List.copyOf(posts).listIterator();
+		return Collections.unmodifiableList(new LinkedList<Post>(posts)).listIterator();
 	}
 
 	/**

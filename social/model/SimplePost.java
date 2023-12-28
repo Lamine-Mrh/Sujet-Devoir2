@@ -1,8 +1,9 @@
 package social.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
@@ -12,8 +13,11 @@ public class SimplePost implements Post {
     private Instant creationDate;
     private Set<User> likedUsers;
 
-    public SimplePost(String texte) {
-        this.texte = texte;
+    public SimplePost(String text) {
+        if (text == null) {
+            throw new NullPointerException();
+        }
+        this.texte = text;
         this.creationDate = Instant.now();
         this.likedUsers = new HashSet<User>();
     }
@@ -40,48 +44,43 @@ public class SimplePost implements Post {
 
     @Override
     public boolean addLikeFrom(User u) {
-        try {
-            return likedUsers.add(u);
-        } catch (NullPointerException e) {
-            throw new InternalError();
+        if (u == null) {
+            throw new NullPointerException();
         }
+        return this.likedUsers.add(u);
     }
 
     @Override
     public Set<User> getLikers() {
-        return Set.copyOf(likedUsers);
+        return Collections.unmodifiableSet(this.likedUsers);
     }
 
     @Override
     public ListIterator<User> iterator() {
-        return List.copyOf(likedUsers).listIterator();
+        return Collections.unmodifiableList(new ArrayList<User>(this.likedUsers)).listIterator();
     }
 
     @Override
     public int compareTo(Post p) {
-        try {
-            return this.getDate().compareTo(p.getDate());
-        } catch (NullPointerException e) {
-            throw new InternalError();
+        if (p == null) {
+            throw new NullPointerException();
         }
-
+        return this.getDate().compareTo(p.getDate());
     }
 
     @Override
     public boolean isAfter(Post p) {
-        try {
-            return this.getDate().isAfter(p.getDate());
-        } catch (NullPointerException e) {
-            throw new InternalError();
+        if (p == null) {
+            throw new NullPointerException();
         }
+        return this.getDate().isAfter(p.getDate());
     }
 
     @Override
     public boolean isBefore(Post p) {
-        try {
-            return this.getDate().isBefore(p.getDate());
-        } catch (NullPointerException e) {
-            throw new InternalError();
+        if (p == null) {
+            throw new NullPointerException();
         }
+        return this.getDate().isBefore(p.getDate());
     }
 }

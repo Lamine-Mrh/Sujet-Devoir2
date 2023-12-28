@@ -7,13 +7,15 @@ public class RePost extends SimplePost {
 
     public RePost(String text, User subPostAuthor, Post subPost) {
         super(text);
+        if (subPostAuthor == null || subPost == null) {
+            throw new NullPointerException("subPostAuthor or subPost cannot be null");
+        }
         this.author = subPostAuthor;
         this.post = subPost;
     }
 
     @Override
     public String getText() {
-        return "Auteur: " + author.getFollowerNb() + "\nTexte: " + post.getText() + "\nContenue: " + super.getText();
+        return super.getText() + "\n" + "RePost from " + this.author.getName() + " : " + this.post.getText();
     }
-
 }
