@@ -1,4 +1,4 @@
-package social.model.test;
+package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -32,8 +32,7 @@ import social.model.FusionSortedIterator;
 import social.model.Post;
 import social.model.SimplePost;
 import social.model.User;
-import static social.model.test.DataProvider.getRandomElt;
-
+import static test.DataProvider.getRandomElt;
 
 /**
  * Test class for User.
@@ -93,14 +92,14 @@ public class TestUser {
 		}
 		Post p = getRandomElt(u.getPosts());
 		Stream<Arguments> exStream = Stream.of(Arguments.of(u, p),
-							Arguments.of(DataProvider.userSupplier(), p),
-							Arguments.of(u, null));
+				Arguments.of(DataProvider.userSupplier(), p),
+				Arguments.of(u, null));
 		return Stream.concat(exStream,
 				Stream.generate(() -> Arguments.of(DataProvider.userSupplier(),
-													DataProvider.postSupplier())))
+						DataProvider.postSupplier())))
 				.limit(DataProvider.LG_STREAM);
 	}
-	
+
 	public static Stream<Arguments> userAndIntProvider() {
 		return userProvider().map(u -> Arguments.of(u, DataProvider.randInt(-1, u.getPostNb() + 2)));
 	}
@@ -200,14 +199,15 @@ public class TestUser {
 		assertEquals(self.nextIndex(), self.previousIndex() + 1);
 		// @invariant lastIndex() == nextIndex() || lastIndex() == previousIndex();
 		assertTrue(self.lastIndex() == self.nextIndex() || self.lastIndex() == self.previousIndex());
-		
+
 		ListIterObserver<Post> resmodel = new ListIterObserverAdapter<Post>(self);
 		// @invariant \result != null && !\resmodel.contains(null);
 		assertFalse(resmodel.contains​(null));
 		// @invariant \resmodel.toList().equals(getPosts());
 		assertEquals(self.getPosts(), resmodel.toList());
-		// @invariant \resmodel.isSorted(Comparator.reverseOrder());		
-		assertTrue(resmodel.isSorted(Comparator.reverseOrder()));	}
+		// @invariant \resmodel.isSorted(Comparator.reverseOrder());
+		assertTrue(resmodel.isSorted(Comparator.reverseOrder()));
+	}
 
 	/**
 	 * Test method for constructor User
@@ -1027,13 +1027,14 @@ public class TestUser {
 		assertFalse(resmodel.contains​(null));
 		// @ensures \resmodel.containsAll(getPosts());
 		assertTrue(resmodel.containsAll(self.getPosts()));
-		// @ensures \resmodel.isSorted(Comparator.reverseOrder());		
+		// @ensures \resmodel.isSorted(Comparator.reverseOrder());
 		assertTrue(resmodel.isSorted(Comparator.reverseOrder()));
-		// @ensures (\forall User u; hasSubscriptionTo(u); \resmodel.containsAll(getPosts()));
+		// @ensures (\forall User u; hasSubscriptionTo(u);
+		// \resmodel.containsAll(getPosts()));
 		for (User u : self.getSubscriptions()) {
 			resmodel.containsAll(u.getPosts());
 		}
-		
+
 		Post anyPost = new SimplePost("Some text");
 		assertThrows(UnsupportedOperationException.class, () -> result.add(anyPost));
 		if (self.getPostNb() > 0) {
@@ -1084,7 +1085,7 @@ public class TestUser {
 		assertFalse(resmodel.contains​(null));
 		// @ensures \resmodel.toList().equals(getPosts());
 		assertEquals(self.getPosts(), resmodel.toList());
-		// @ensures \resmodel.isSorted(Comparator.reverseOrder());		
+		// @ensures \resmodel.isSorted(Comparator.reverseOrder());
 		assertTrue(resmodel.isSorted(Comparator.reverseOrder()));
 		Post anyPost = new SimplePost("Some text");
 		assertThrows(UnsupportedOperationException.class, () -> result.add(anyPost));
@@ -1204,7 +1205,6 @@ public class TestUser {
 		int oldNextIndex = self.nextIndex();
 		// old in:@ensures previousIndex() == \old(previousIndex()) + 1;
 		int oldPreviousIndex = self.previousIndex();
-		
 
 		// Exécution:
 		Post result = self.next();
@@ -1538,7 +1538,7 @@ public class TestUser {
 
 		// Invariant:
 		assertInvariant(self);
-		
+
 		assertThrows(UnsupportedOperationException.class, () -> self.remove());
 
 	}

@@ -1,3 +1,4 @@
+package test;
 
 /**
  *
@@ -24,6 +25,7 @@ import social.model.Post;
 import social.model.RePost;
 import social.model.SimplePost;
 import social.model.User;
+import social.model.FusionSortedIterator;
 
 import java.util.Comparator;
 import java.util.HashSet;

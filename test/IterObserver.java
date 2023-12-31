@@ -1,7 +1,8 @@
+package test;
+
 /**
  * 
  */
-package social.model.test;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -11,7 +12,8 @@ import java.util.Set;
 
 /**
  * Les méthodes définnies dans cette interface permettent d'observer la
- * collection d'éléments énumérables par un itérateur fini, comme si ces éléments
+ * collection d'éléments énumérables par un itérateur fini, comme si ces
+ * éléments
  * appartenaient à une Collection. Ces méthodes sont uniquement destinées à
  * permettre d'effectuer des tests afin de vérifier que la collection d'éléments
  * énumérés par un itérateur correspond à ce qui est voulu.

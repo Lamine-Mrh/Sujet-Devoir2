@@ -1,4 +1,5 @@
-package social.model.test;
+
+package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -69,7 +70,9 @@ public class TestPost {
 
 	public static Stream<Arguments> stringAndUserAndPostProvider() {
 		Stream<Arguments> mainStream = Stream.generate(() -> DataProvider.userSupplier())
-			.map(u -> Arguments.of(DataProvider.stringSupplier(), u, DataProvider.randBool(50) ?DataProvider.postSupplier() : DataProvider.getRandomElt(u.getPosts())));
+				.map(u -> Arguments.of(DataProvider.stringSupplier(), u,
+						DataProvider.randBool(50) ? DataProvider.postSupplier()
+								: DataProvider.getRandomElt(u.getPosts())));
 		return Stream.concat(
 				Stream.of(Arguments.of(DataProvider.stringSupplier(), null, DataProvider.postSupplier()),
 						Arguments.of(null, null, null), Arguments.of(null, DataProvider.userSupplier(), null)),

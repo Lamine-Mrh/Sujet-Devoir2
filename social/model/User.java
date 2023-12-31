@@ -1,6 +1,7 @@
 /**
  * 
  */
+package social.model;
 
 import java.time.Instant;
 import java.util.Collection;

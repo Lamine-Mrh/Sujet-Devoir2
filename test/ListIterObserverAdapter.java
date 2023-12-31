@@ -1,7 +1,8 @@
+
 /**
  *
  */
-package social.model.test;
+package test;
 
 import java.util.Collection;
 import java.util.Comparator;

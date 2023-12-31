@@ -1,4 +1,5 @@
-package social.model.test;
+
+package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,9 +47,9 @@ public class TestFusionSortedIterator {
 
 	public static Stream<Set<User>> setOfListIterProvider() {
 		Set<User> iterList = DataProvider.setOfListIterSupplier();
-//		if (!iterList.isEmpty()) {
-//			iterList.set(Suppliers.randInt(iterList.size()), null);
-//		}
+		// if (!iterList.isEmpty()) {
+		// iterList.set(Suppliers.randInt(iterList.size()), null);
+		// }
 		iterList.add(null);
 		Stream<Set<User>> exStream = Stream.of(null, iterList);
 		return Stream.concat(exStream, Stream.generate(DataProvider::setOfListIterSupplier))
@@ -148,7 +148,6 @@ public class TestFusionSortedIterator {
 		// Post-conditions:
 		setModel(result);
 
-
 		// @ensures (\forall ListIterator<Post> iter; postIterators.contains(iter);
 		// iterModel.containsAll(toList(iter)));
 		int totalSize = 0;
@@ -192,164 +191,160 @@ public class TestFusionSortedIterator {
 		assertNotNull(result.comparator());
 		// @ensures lastIterator() == null;
 		assertNull(result.lastIterator());
-		// @ensures (\forall I iter; iters.contains(iter); !iter.hasPrevious() && iter.lastIndex() == -1);
+		// @ensures (\forall I iter; iters.contains(iter); !iter.hasPrevious() &&
+		// iter.lastIndex() == -1);
 		for (User u : postIterators) {
 			assertFalse(u.hasPrevious());
 			assertTrue(u.lastIndex() == -1);
 		}
-		
+
 		// Invariant:
 		assertInvariant(result);
 	}
 
-    /**
-     * Test method for method startIteration
-     *
-     * (Re)Initialise ce ListIterateur pour le démarrage d'une nouvelle itération
-     * sur ses éléments.
-     */
-    @ParameterizedTest
-    @MethodSource("fusSortedIterProvider")
-    public void teststartIteration(FusionSortedIterator<Post, User> self) {
-            assumeTrue(self != null);
-    		setModel(self);
-            
-            // Invariant:
-            assertInvariant(self);
-            
-            // Pré-conditions:
-            
-            
-            // Oldies:
-            
-            // Exécution:
-            self.startIteration();
-            
-            // Post-conditions:
-            // @ensures !hasPrevious();
-            assertFalse(self.hasPrevious());
-            // @ensures previousIndex() == -1;
-            assertEquals(-1, self.previousIndex());
-            // @ensures nextIndex() == 0;
-            assertEquals(0, self.nextIndex());
-            // @ensures lastIndex() == -1;
-            assertEquals(-1, self.lastIndex());
-            // @ensures lastIterator() == null;
-            assertNull(self.lastIterator());
-            
-            // Invariant:
-            assertInvariant(self);
-    }
-    
-    /**
-     * Test method for method comparator
-     *
-     * Renvoie le comparateur selon lequel les éléments de cet itérateur sont
-     * ordonnés.
-     */
-    @ParameterizedTest
-    @MethodSource("fusSortedIterProvider")
-    public void testcomparator(FusionSortedIterator<Post, User> self) {
-            assumeTrue(self != null);
-    		setModel(self);
-            
-            // Invariant:
-            assertInvariant(self);
-            
-            // Pré-conditions:
-            
-            
-            // Save state for purity check:
-            saveState(self);
-            
-            // Oldies:
-            
-            // Exécution:
-            Comparator<? super Post> result = self.comparator();
-            
-            // Post-conditions:
-            // @ensures \result != null;
-            assertNotNull(result);
-            
-            // Assert purity:
-            assertPurity(self);
-            
-            // Invariant:
-            assertInvariant(self);
-    }
-    
+	/**
+	 * Test method for method startIteration
+	 *
+	 * (Re)Initialise ce ListIterateur pour le démarrage d'une nouvelle itération
+	 * sur ses éléments.
+	 */
+	@ParameterizedTest
+	@MethodSource("fusSortedIterProvider")
+	public void teststartIteration(FusionSortedIterator<Post, User> self) {
+		assumeTrue(self != null);
+		setModel(self);
 
-    /**
-     * Test method for method lastIterator
-     *
-     * Renvoie l'itérateur ayant produit l'élément lors du dernier appel à next() ou
-     * previous().
-     */
-    @ParameterizedTest
-    @MethodSource("fusSortedIterProvider")
-    public void testlastIterator(FusionSortedIterator<Post, User> self) {
-            assumeTrue(self != null);
-    		setModel(self);
-            
-            // Invariant:
-            assertInvariant(self);
-            
-            // Pré-conditions:
-            
-            
-            // Save state for purity check:
-            saveState(self);
-            
-            // Oldies:
-            
-            // Exécution:
-            User result = self.lastIterator();
-            
-            // Post-conditions:
-            
-            // Assert purity:
-            assertPurity(self);
-            
-            // Invariant:
-            assertInvariant(self);
-    }
-    
-    /**
-     * Test method for method lastIndex
-     *
-     * Renvoie l'index pour cet itérateur du dernier élément retourné par next() ou
-     * previous().
-     */
-    @ParameterizedTest
-    @MethodSource("fusSortedIterProvider")
-    public void testlastIndex(FusionSortedIterator<Post, User> self) {
-            assumeTrue(self != null);
-    		setModel(self);
-            
-            // Invariant:
-            assertInvariant(self);
-            
-            // Pré-conditions:
-            
-            
-            // Save state for purity check:
-            saveState(self);
-            
-            // Oldies:
-            
-            // Exécution:
-            int result = self.lastIndex();
-            
-            // Post-conditions:
-            
-            // Assert purity:
-            assertPurity(self);
-            
-            // Invariant:
-            assertInvariant(self);
-    }
-       
-    /**
+		// Invariant:
+		assertInvariant(self);
+
+		// Pré-conditions:
+
+		// Oldies:
+
+		// Exécution:
+		self.startIteration();
+
+		// Post-conditions:
+		// @ensures !hasPrevious();
+		assertFalse(self.hasPrevious());
+		// @ensures previousIndex() == -1;
+		assertEquals(-1, self.previousIndex());
+		// @ensures nextIndex() == 0;
+		assertEquals(0, self.nextIndex());
+		// @ensures lastIndex() == -1;
+		assertEquals(-1, self.lastIndex());
+		// @ensures lastIterator() == null;
+		assertNull(self.lastIterator());
+
+		// Invariant:
+		assertInvariant(self);
+	}
+
+	/**
+	 * Test method for method comparator
+	 *
+	 * Renvoie le comparateur selon lequel les éléments de cet itérateur sont
+	 * ordonnés.
+	 */
+	@ParameterizedTest
+	@MethodSource("fusSortedIterProvider")
+	public void testcomparator(FusionSortedIterator<Post, User> self) {
+		assumeTrue(self != null);
+		setModel(self);
+
+		// Invariant:
+		assertInvariant(self);
+
+		// Pré-conditions:
+
+		// Save state for purity check:
+		saveState(self);
+
+		// Oldies:
+
+		// Exécution:
+		Comparator<? super Post> result = self.comparator();
+
+		// Post-conditions:
+		// @ensures \result != null;
+		assertNotNull(result);
+
+		// Assert purity:
+		assertPurity(self);
+
+		// Invariant:
+		assertInvariant(self);
+	}
+
+	/**
+	 * Test method for method lastIterator
+	 *
+	 * Renvoie l'itérateur ayant produit l'élément lors du dernier appel à next() ou
+	 * previous().
+	 */
+	@ParameterizedTest
+	@MethodSource("fusSortedIterProvider")
+	public void testlastIterator(FusionSortedIterator<Post, User> self) {
+		assumeTrue(self != null);
+		setModel(self);
+
+		// Invariant:
+		assertInvariant(self);
+
+		// Pré-conditions:
+
+		// Save state for purity check:
+		saveState(self);
+
+		// Oldies:
+
+		// Exécution:
+		User result = self.lastIterator();
+
+		// Post-conditions:
+
+		// Assert purity:
+		assertPurity(self);
+
+		// Invariant:
+		assertInvariant(self);
+	}
+
+	/**
+	 * Test method for method lastIndex
+	 *
+	 * Renvoie l'index pour cet itérateur du dernier élément retourné par next() ou
+	 * previous().
+	 */
+	@ParameterizedTest
+	@MethodSource("fusSortedIterProvider")
+	public void testlastIndex(FusionSortedIterator<Post, User> self) {
+		assumeTrue(self != null);
+		setModel(self);
+
+		// Invariant:
+		assertInvariant(self);
+
+		// Pré-conditions:
+
+		// Save state for purity check:
+		saveState(self);
+
+		// Oldies:
+
+		// Exécution:
+		int result = self.lastIndex();
+
+		// Post-conditions:
+
+		// Assert purity:
+		assertPurity(self);
+
+		// Invariant:
+		assertInvariant(self);
+	}
+
+	/**
 	 * Test method for method hasNext
 	 *
 	 *
@@ -437,7 +432,8 @@ public class TestFusionSortedIterator {
 		assertEquals(oldNextIndex, self.previousIndex());
 		// @ensures \result.equals(\old(iterModel.get(nextIndex())));
 		assertEquals(oldNext, result);
-		// @ensures \old(hasPrevious()) ==> comparator().compare(iterModel.get(\old(previousIndex())), result) <= 0;
+		// @ensures \old(hasPrevious()) ==>
+		// comparator().compare(iterModel.get(\old(previousIndex())), result) <= 0;
 		if (oldHasPrevious) {
 			assertTrue(self.comparator().compare(iterModel.get(oldPrevIndex), result) <= 0);
 		}
@@ -447,7 +443,7 @@ public class TestFusionSortedIterator {
 		assertEquals(oldPrevIndex + 1, self.previousIndex());
 		// @ensures lastIndex() == \old(nextIndex());
 		assertEquals(oldNextIndex, self.lastIndex());
-		
+
 		// Invariant:
 		assertInvariant(self);
 	}
@@ -537,7 +533,8 @@ public class TestFusionSortedIterator {
 		assertEquals(oldPrevious, result);
 		// @ensures \result.equals(iterModel.get(nextIndex()));
 		assertEquals(iterModel.get(self.nextIndex()), result);
-		// @ensures \old(hasNext()) ==> comparator().compare(\result, iterModel.get(\old(nextIndex())) <= 0;
+		// @ensures \old(hasNext()) ==> comparator().compare(\result,
+		// iterModel.get(\old(nextIndex())) <= 0;
 		if (oldHasNext) {
 			assertTrue(self.comparator().compare(result, iterModel.get(oldNextIndex)) <= 0);
 		}

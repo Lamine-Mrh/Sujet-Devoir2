@@ -1,3 +1,4 @@
+package social.model;
 
 public class RePost extends SimplePost {
 
