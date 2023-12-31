@@ -1,7 +1,7 @@
+
 /**
  * 
  */
-package social.model;
 
 import java.util.ListIterator;
 

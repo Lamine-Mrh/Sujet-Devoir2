@@ -1,7 +1,6 @@
 /**
 *
 */
-package social.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;

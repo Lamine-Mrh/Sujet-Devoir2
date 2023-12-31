@@ -1,4 +1,3 @@
-package social.model;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,27 +21,22 @@ public class SimplePost implements Post {
         this.likedUsers = new HashSet<User>();
     }
 
-    @Override
     public Instant getDate() {
         return this.creationDate;
     }
 
-    @Override
     public String getText() {
         return this.texte;
     }
 
-    @Override
     public int getLikeNumber() {
         return this.likedUsers.size();
     }
 
-    @Override
     public boolean hasLikeFrom(User u) {
         return this.likedUsers.contains(u);
     }
 
-    @Override
     public boolean addLikeFrom(User u) {
         if (u == null) {
             throw new NullPointerException();
@@ -50,17 +44,14 @@ public class SimplePost implements Post {
         return this.likedUsers.add(u);
     }
 
-    @Override
     public Set<User> getLikers() {
         return Collections.unmodifiableSet(this.likedUsers);
     }
 
-    @Override
     public ListIterator<User> iterator() {
         return Collections.unmodifiableList(new ArrayList<User>(this.likedUsers)).listIterator();
     }
 
-    @Override
     public int compareTo(Post p) {
         if (p == null) {
             throw new NullPointerException();
@@ -68,7 +59,6 @@ public class SimplePost implements Post {
         return this.getDate().compareTo(p.getDate());
     }
 
-    @Override
     public boolean isAfter(Post p) {
         if (p == null) {
             throw new NullPointerException();
@@ -76,7 +66,6 @@ public class SimplePost implements Post {
         return this.getDate().isAfter(p.getDate());
     }
 
-    @Override
     public boolean isBefore(Post p) {
         if (p == null) {
             throw new NullPointerException();

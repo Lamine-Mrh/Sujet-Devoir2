@@ -1,7 +1,7 @@
+
 /**
  *
  */
-package social.model.test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -19,17 +19,15 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 
-import social.model.ExtendedListIterator;
-import social.model.FusionSortedIterator;
 import social.model.Post;
 import social.model.RePost;
 import social.model.SimplePost;
 import social.model.User;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  *
@@ -136,15 +134,15 @@ public class DataProvider {
 		return randomSet(10, () -> userSupplier());
 	}
 
-//	public static DateSortedIterator dateSortedIterSupplier() {
-//		return new DateSortedIterator(listOfListIterSupplier());
-//	}
+	// public static DateSortedIterator dateSortedIterSupplier() {
+	// return new DateSortedIterator(listOfListIterSupplier());
+	// }
 
 	public static FusionSortedIterator<Post, User> fusSortedIterSupplier() {
 		return new FusionSortedIterator<Post, User>(setOfListIterSupplier(), Comparator.reverseOrder());
 
 	}
-	
+
 	// int and boolean supplier helpers:
 	/**
 	 * Renvoie un int obtenue par un générateur pseudo-aléatoire.
@@ -302,16 +300,16 @@ public class DataProvider {
 			List<T> l = (List<T>) c;
 			assertThrows(UnsupportedOperationException.class, () -> l.add(0, anyElt));
 			assertThrows(UnsupportedOperationException.class, () -> l.addAll(0, anyList));
-			assertThrows(UnsupportedOperationException.class, () -> l.replaceAll((e) -> anyElt));	
+			assertThrows(UnsupportedOperationException.class, () -> l.replaceAll((e) -> anyElt));
 			assertIsUnmodifiable(l.listIterator());
 			assertIsUnmodifiable(l.listIterator(0));
 			if (!l.isEmpty()) {
-				assertThrows(UnsupportedOperationException.class, () -> l.remove(0));				
-				assertThrows(UnsupportedOperationException.class, () -> l.set(0, anyElt));				
+				assertThrows(UnsupportedOperationException.class, () -> l.remove(0));
+				assertThrows(UnsupportedOperationException.class, () -> l.set(0, anyElt));
 			}
 		}
 	}
-	
+
 	public static <T> void assertIsUnmodifiable(Iterator<T> iter) {
 		if (iter.hasNext()) {
 			T elt = iter.next();
